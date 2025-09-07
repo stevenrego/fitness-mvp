@@ -1,0 +1,359 @@
+﻿generator client { provider = "prisma-client-js" }
+datasource db { provider = "postgresql"; url = env("DATABASE_URL") }
+
+enum Role { USER COACH ADMIN }
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  roles     Role[]   @default([USER])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  profile   Profile?
+  coach     CoachProfile?
+  sessions  WorkoutSession[]
+  subscription Subscription?
+  notifications Notification[]
+  posts      Post[]
+  messages   Message[] @relation("UserMessages")
+  pointTxns  PointTransaction[]
+  orders     Order[]
+}
+
+model CoachProfile {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  certifications String?
+  specialties    String?
+  bio            String?
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Gym {
+  id       String   @id @default(cuid())
+  name     String
+  address  String?
+  approved Boolean  @default(false)
+  users    Profile[]
+}
+
+model Profile {
+  id         String   @id @default(cuid())
+  userId     String   @unique
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  heightCm   Int?
+  weightKg   Decimal? @db.Decimal(5,2)
+  birthday   DateTime?
+  gender     String?
+  activity   String?
+  gymId      String?
+  gym        Gym?     @relation(fields: [gymId], references: [id])
+  approvedAt DateTime?
+  goals      String?
+}
+
+model Subscription {
+  id         String   @id @default(cuid())
+  userId     String   @unique
+  provider   String   // stripe | myfatoorah
+  plan       String
+  status     String
+  currency   String   @default("kwd")
+  amount     Int?     // minor units (e.g., 300 = 3.000 KWD)
+  customerId String?
+  subId      String?
+  currentPeriodEnd DateTime?
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Exercise {
+  id        String   @id @default(cuid())
+  name      String
+  bodyPart  String?
+  equipment String?
+  createdBy String?
+}
+
+model Program {
+  id        String   @id @default(cuid())
+  coachId   String
+  name      String
+  goal      String?
+  price     Decimal? @db.Decimal(7,2)
+  phases    ProgramPhase[]
+  coach     CoachProfile @relation(fields: [coachId], references: [id])
+}
+
+model ProgramPhase {
+  id        String   @id @default(cuid())
+  programId String
+  name      String
+  order     Int
+  days      ProgramDay[]
+  program   Program @relation(fields: [programId], references: [id], onDelete: Cascade)
+}
+
+model ProgramDay {
+  id        String   @id @default(cuid())
+  phaseId   String
+  order     Int
+  items     ProgramExercise[]
+  phase     ProgramPhase @relation(fields: [phaseId], references: [id], onDelete: Cascade)
+}
+
+model ProgramExercise {
+  id          String   @id @default(cuid())
+  dayId       String
+  exerciseId  String
+  sets        Int
+  reps        Int
+  load        Decimal? @db.Decimal(6,2)
+  tempo       String?
+  notes       String?
+  day         ProgramDay @relation(fields: [dayId], references: [id], onDelete: Cascade)
+  exercise    Exercise   @relation(fields: [exerciseId], references: [id])
+}
+
+model Enrollment {
+  id        String   @id @default(cuid())
+  userId    String
+  programId String
+  startedAt DateTime @default(now())
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  program   Program @relation(fields: [programId], references: [id], onDelete: Cascade)
+}
+
+model WorkoutTemplate {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  notes     String?
+  items     WorkoutItem[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model WorkoutItem {
+  id           String   @id @default(cuid())
+  templateId   String
+  exerciseId   String
+  targetSets   Int      @default(3)
+  targetReps   Int      @default(10)
+  targetWeight Decimal? @db.Decimal(6,2)
+  order        Int      @default(0)
+  template     WorkoutTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  exercise     Exercise @relation(fields: [exerciseId], references: [id])
+}
+
+model WorkoutSession {
+  id        String   @id @default(cuid())
+  userId    String
+  startedAt DateTime @default(now())
+  endedAt   DateTime?
+  notes     String?
+  sets      WorkoutSet[]
+  user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model WorkoutSet {
+  id         String   @id @default(cuid())
+  sessionId  String
+  exerciseId String
+  setNumber  Int
+  reps       Int
+  weight     Decimal? @db.Decimal(6,2)
+  rpe        Int?
+  session    WorkoutSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  exercise   Exercise @relation(fields: [exerciseId], references: [id])
+}
+
+model Habit {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  frequency String   // daily/weekly
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  logs      HabitLog[]
+}
+
+model HabitLog {
+  id       String   @id @default(cuid())
+  habitId  String
+  date     DateTime @default(now())
+  done     Boolean  @default(false)
+  habit    Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
+}
+
+model NutritionEntry {
+  id        String   @id @default(cuid())
+  userId    String
+  date      DateTime @default(now())
+  meal      String
+  calories  Int
+  protein   Int      @default(0)
+  carbs     Int      @default(0)
+  fat       Int      @default(0)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  authorId  String
+  text      String?
+  mediaUrl  String?
+  visibility String @default("public")
+  createdAt DateTime @default(now())
+  author    User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  comments  Comment[]
+  likes     Like[]
+}
+
+model Comment {
+  id       String   @id @default(cuid())
+  postId   String
+  authorId String
+  body     String
+  createdAt DateTime @default(now())
+  post     Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author   User @relation(fields: [authorId], references: [id])
+}
+
+model Like {
+  id       String   @id @default(cuid())
+  postId   String
+  userId   String
+  createdAt DateTime @default(now())
+  post     Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user     User @relation(fields: [userId], references: [id])
+  @@unique([postId, userId])
+}
+
+model Follow {
+  id          String @id @default(cuid())
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+  @@unique([followerId, followingId])
+}
+
+model Report {
+  id       String @id @default(cuid())
+  postId   String
+  reporterId String
+  reason   String
+  createdAt DateTime @default(now())
+}
+
+model Thread {
+  id      String @id @default(cuid())
+  createdAt DateTime @default(now())
+}
+
+model Message {
+  id        String @id @default(cuid())
+  threadId  String
+  senderId  String
+  body      String
+  readAt    DateTime?
+  createdAt DateTime @default(now())
+  thread    Thread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  sender    User   @relation("UserMessages", fields: [senderId], references: [id])
+}
+
+model Notification {
+  id      String @id @default(cuid())
+  userId  String
+  type    String
+  payload String
+  readAt  DateTime?
+  createdAt DateTime @default(now())
+  user    User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Challenge {
+  id        String @id @default(cuid())
+  name      String
+  rulesJson String?
+  startsAt  DateTime
+  endsAt    DateTime
+  rewardPts Int @default(0)
+  participants ChallengeParticipant[]
+}
+
+model ChallengeParticipant {
+  id          String @id @default(cuid())
+  challengeId String
+  userId      String
+  joinedAt    DateTime @default(now())
+  challenge   Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  proofs      ChallengeProof[]
+}
+
+model ChallengeProof {
+  id         String @id @default(cuid())
+  participantId String
+  url        String
+  status     String @default("pending") // approved | rejected
+  reason     String?
+  createdAt  DateTime @default(now())
+  participant ChallengeParticipant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+}
+
+model PointTransaction {
+  id      String @id @default(cuid())
+  userId  String
+  delta   Int
+  reason  String
+  refId   String?
+  createdAt DateTime @default(now())
+  user    User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Reward {
+  id        String @id @default(cuid())
+  name      String
+  pointsCost Int
+}
+
+model Redemption {
+  id        String @id @default(cuid())
+  userId    String
+  rewardId  String
+  createdAt DateTime @default(now())
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reward    Reward @relation(fields: [rewardId], references: [id])
+}
+
+model Product {
+  id        String @id @default(cuid())
+  name      String
+  price     Decimal @db.Decimal(7,2)
+  currency  String  @default("KWD")
+  stock     Int     @default(0)
+  imageUrl  String?
+}
+
+model Order {
+  id        String @id @default(cuid())
+  userId    String
+  total     Decimal @db.Decimal(9,2)
+  currency  String  @default("KWD")
+  status    String  @default("pending")
+  createdAt DateTime @default(now())
+  items     OrderItem[]
+  user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model OrderItem {
+  id        String @id @default(cuid())
+  orderId   String
+  productId String
+  qty       Int
+  price     Decimal @db.Decimal(7,2)
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id])
+}

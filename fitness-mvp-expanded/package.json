@@ -1,0 +1,39 @@
+﻿{
+  "name": "fitness-mvp-expanded",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/first-run.cjs && next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "seed": "tsx prisma/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.17.0",
+    "@tanstack/react-query": "^5.51.0",
+    "@uploadcare/upload-client": "^6.0.0",
+    "autoprefixer": "^10.4.18",
+    "bcryptjs": "^2.4.3",
+    "clsx": "^2.1.1",
+    "next": "^14.2.5",
+    "next-auth": "^5.0.0",
+    "postcss": "^8.4.38",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwindcss": "^3.4.7",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^20.12.12",
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.5",
+    "tsx": "^4.16.2",
+    "typescript": "^5.6.2"
+  }
+}
