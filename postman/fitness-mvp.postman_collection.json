@@ -1,0 +1,13 @@
+﻿{
+  "info": { "name": "Fitness MVP (Expanded) - API", "_postman_id": "fitness-mvp", "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json" },
+  "item": [
+    { "name": "Register", "request": { "method": "POST", "url": "{{baseUrl}}/api/register" } },
+    { "name": "Auth Session", "request": { "method": "GET", "url": "{{baseUrl}}/api/auth/session" } },
+    { "name": "Workouts - Templates (GET)", "request": { "method": "GET", "url": "{{baseUrl}}/api/workouts" } },
+    { "name": "Workout Sessions (GET)", "request": { "method": "GET", "url": "{{baseUrl}}/api/workout-sessions" } },
+    { "name": "Habits (GET)", "request": { "method": "GET", "url": "{{baseUrl}}/api/habits" } },
+    { "name": "Nutrition (GET)", "request": { "method": "GET", "url": "{{baseUrl}}/api/nutrition" } },
+    { "name": "Checkout (POST)", "request": { "method": "POST", "url": "{{baseUrl}}/api/billing/checkout" } }
+  ],
+  "variable": [{ "key": "baseUrl", "value": "http://localhost:3000" }]
+}
