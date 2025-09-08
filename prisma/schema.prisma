@@ -64,7 +64,6 @@ model User {
   // Each user can optionally be assigned to a coach
   assignedCoach CoachProfile?  @relation("CoachClients", fields: [assignedCoachId], references: [id])
   assignedCoachId String?
-  dieticianProfile DieticianProfile?
   sessions      WorkoutSession[]
   subscription  Subscription?
   notifications Notification[]
@@ -79,7 +78,6 @@ model User {
   gymId         String?
   // Each user can optionally be a dietician
   dieticianProfile   DieticianProfile?  @relation("DieticianOwner")
-
   // Each user can optionally have a dietician assigned
   assignedDietician  DieticianProfile?  @relation("DieticianClients", fields: [assignedDieticianId], references: [id])
   assignedDieticianId String?
