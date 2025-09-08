@@ -15,3 +15,4 @@
 - Admin: admin@demo.com / admin123
 - Coach: coach@demo.com / coach123
 - User:  user@demo.com  / user123
+Deployed: 2025-09-08 09:35
