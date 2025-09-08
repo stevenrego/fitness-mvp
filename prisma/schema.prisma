@@ -320,3 +320,13 @@ model Gym {
   approvedBy String?
   members    User[]
 }
+model WorkoutSession {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  title     String
+  date      DateTime @default(now())
+  duration  Int      // in minutes
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
