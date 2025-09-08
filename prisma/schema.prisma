@@ -77,6 +77,13 @@ model User {
   dailyLogs     DailyLog[]
   gym           Gym?             @relation(fields: [gymId], references: [id])
   gymId         String?
+  // Each user can optionally be a dietician
+  dieticianProfile   DieticianProfile?  @relation("DieticianOwner")
+
+  // Each user can optionally have a dietician assigned
+  assignedDietician  DieticianProfile?  @relation("DieticianClients", fields: [assignedDieticianId], references: [id])
+  assignedDieticianId String?
+
 }
 
 model CoachProfile {
@@ -98,13 +105,22 @@ model CoachProfile {
 
 
 model DieticianProfile {
-  id           String     @id @default(cuid())
-  user         User       @relation(fields: [userId], references: [id])
-  userId       String     @unique
-  bio          String?
-  specialties  String?
-  clients      User[]
-  mealPlans    MealPlan[]
+  id           String   @id @default(cuid())
+
+  // Connect this profile to the main User
+  user         User     @relation("DieticianOwner", fields: [userId], references: [id])
+  userId       String   @unique
+
+  // Link to multiple clients (users)
+  clients      User[]   @relation("DieticianClients")
+
+  specialty    String?
+  license      String?
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
 }
 
 model WorkoutPlan {
