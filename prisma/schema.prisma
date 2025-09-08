@@ -1,3 +1,8 @@
+// schema.prisma — Generated for Fitness MVP
+
+// ====================
+// GENERATOR & DATASOURCE
+// ====================
 generator client {
   provider = "prisma-client-js"
 }
@@ -7,27 +12,311 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ====================
+// ENUMS
+// ====================
 enum Role {
   USER
   COACH
   ADMIN
+  DIETICIAN
 }
 
+enum MealType {
+  BREAKFAST
+  LUNCH
+  DINNER
+  SNACK
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  EXPIRED
+  CANCELLED
+}
+
+enum OrderStatus {
+  PENDING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+// ====================
+// MODELS
+// ====================
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String
-  name      String?
-  roles     Role[]   @default([USER])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  profile   Profile?
-  coach     CoachProfile?
-  sessions  WorkoutSession[]
-  subscription Subscription?
+  id            String           @id @default(cuid())
+  email         String           @unique
+  password      String
+  name          String?
+  gender        String?
+  dob           DateTime?
+  height        Float?
+  weight        Float?
+  goal          String?
+  roles         Role[]           @default([USER])
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  coachProfile  CoachProfile?
+  dieticianProfile DieticianProfile?
+  sessions      WorkoutSession[]
+  subscription  Subscription?
   notifications Notification[]
-  posts      Post[]
-  messages   Message[] @relation("UserMessages")
-  pointTxns  PointTransaction[]
-  orders     Order[]
+  posts         Post[]
+  messages      Message[]        @relation("UserMessages")
+  pointTxns     PointTransaction[]
+  orders        ShopOrder[]
+  challenges    ChallengeParticipant[]
+  planProgress  PlanEnrollment[]
+  dailyLogs     DailyLog[]
+  gym           Gym?             @relation(fields: [gymId], references: [id])
+  gymId         String?
+}
+
+model CoachProfile {
+  id           String     @id @default(cuid())
+  user         User       @relation(fields: [userId], references: [id])
+  userId       String     @unique
+  certifications String?
+  specializations String?
+  experience   Int?
+  bio          String?
+  rating       Float?
+  workoutPlans WorkoutPlan[]
+  clients      User[]
+}
+
+model DieticianProfile {
+  id           String     @id @default(cuid())
+  user         User       @relation(fields: [userId], references: [id])
+  userId       String     @unique
+  bio          String?
+  specialties  String?
+  clients      User[]
+  mealPlans    MealPlan[]
+}
+
+model WorkoutPlan {
+  id          String        @id @default(cuid())
+  title       String
+  description String?
+  level       String?
+  duration    Int?
+  price       Float?
+  visibility  String?
+  createdAt   DateTime      @default(now())
+  coach       CoachProfile? @relation(fields: [coachId], references: [id])
+  coachId     String?
+  days        WorkoutDay[]
+  enrollments PlanEnrollment[]
+}
+
+model WorkoutDay {
+  id        String     @id @default(cuid())
+  plan      WorkoutPlan @relation(fields: [planId], references: [id])
+  planId    String
+  dayNumber Int
+  exercises Exercise[]
+}
+
+model Exercise {
+  id           String   @id @default(cuid())
+  name         String
+  description  String?
+  category     String?
+  muscleGroup  String?
+  videoUrl     String?
+  equipment    String?
+  defaultSets  Int?
+  defaultReps  Int?
+}
+
+model MealPlan {
+  id        String   @id @default(cuid())
+  title     String
+  coach     DieticianProfile? @relation(fields: [coachId], references: [id])
+  coachId   String?
+  calories  Float?
+  macros    String?
+  description String?
+  meals     Meal[]
+}
+
+model Meal {
+  id         String   @id @default(cuid())
+  name       String
+  mealPlan   MealPlan @relation(fields: [mealPlanId], references: [id])
+  mealPlanId String
+  mealType   MealType
+  foodItems  FoodItem[]
+}
+
+model FoodItem {
+  id          String   @id @default(cuid())
+  name        String
+  calories    Float
+  carbs       Float
+  protein     Float
+  fat         Float
+  imageUrl    String?
+  barcode     String?
+  portionSize String?
+}
+
+model Subscription {
+  id        String              @id @default(cuid())
+  user      User                @relation(fields: [userId], references: [id])
+  userId    String              @unique
+  type      String
+  status    SubscriptionStatus
+  startDate DateTime
+  endDate   DateTime
+  gateway   String?
+  txnId     String?
+}
+
+model Transaction {
+  id         String   @id @default(cuid())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  amount     Float
+  type       String
+  status     String
+  provider   String
+  timestamp  DateTime @default(now())
+}
+
+model Challenge {
+  id          String   @id @default(cuid())
+  title       String
+  type        String
+  startDate   DateTime
+  endDate     DateTime
+  criteria    String?
+  adminId     String?
+  status      String?
+  participants ChallengeParticipant[]
+}
+
+model ChallengeParticipant {
+  id         String    @id @default(cuid())
+  user       User      @relation(fields: [userId], references: [id])
+  userId     String
+  challenge  Challenge @relation(fields: [challengeId], references: [id])
+  challengeId String
+  progress   String?
+  proofImage String?
+  verified   Boolean?
+  rejectionReason String?
+}
+
+model Post {
+  id        String    @id @default(cuid())
+  user      User      @relation(fields: [userId], references: [id])
+  userId    String
+  text      String?
+  mediaUrl  String?
+  type      String?
+  createdAt DateTime  @default(now())
+  comments  Comment[]
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  text      String
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  type      String
+  content   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  sender    User     @relation("UserMessages", fields: [senderId], references: [id])
+  senderId  String
+  receiver  User     @relation("UserMessages", fields: [receiverId], references: [id])
+  receiverId String
+  text      String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model PlanEnrollment {
+  id            String       @id @default(cuid())
+  user          User         @relation(fields: [userId], references: [id])
+  userId        String
+  workoutPlan   WorkoutPlan @relation(fields: [planId], references: [id])
+  planId        String
+  progress      String?
+  startDate     DateTime?
+  status        String?
+}
+
+model DailyLog {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  date      DateTime
+  notes     String?
+  achievements Achievement[]
+}
+
+model Achievement {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  type      String
+  badge     String?
+  date      DateTime
+}
+
+model PointTransaction {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  points    Int
+  reason    String
+  createdAt DateTime @default(now())
+}
+
+model Reward {
+  id        String   @id @default(cuid())
+  title     String
+  type      String
+  cost      Int
+  inventory Int?
+  image     String?
+  description String?
+}
+
+model ShopOrder {
+  id        String     @id @default(cuid())
+  user      User       @relation(fields: [userId], references: [id])
+  userId    String
+  reward    Reward     @relation(fields: [rewardId], references: [id])
+  rewardId  String
+  status    OrderStatus
+  redeemedAt DateTime?
+}
+
+model Gym {
+  id         String   @id @default(cuid())
+  name       String
+  address    String
+  status     String?
+  addedBy    String?
+  approvedBy String?
+  members    User[]
 }
