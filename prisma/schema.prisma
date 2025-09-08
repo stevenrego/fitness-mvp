@@ -76,16 +76,21 @@ model User {
 
 model CoachProfile {
   id           String     @id @default(cuid())
-  user         User       @relation(fields: [userId], references: [id])
+
+  // The User who is this coach (1-to-1)
+  user         User       @relation("CoachOwner", fields: [userId], references: [id])
   userId       String     @unique
-  certifications String?
-  specializations String?
+
+  // The Users who are this coach’s clients (1-to-many)
+  clients      User[]     @relation("CoachClients")
+
+  expertise    String?
   experience   Int?
-  bio          String?
-  rating       Float?
-  workoutPlans WorkoutPlan[]
-  clients      User[]
+
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
 }
+
 
 model DieticianProfile {
   id           String     @id @default(cuid())
