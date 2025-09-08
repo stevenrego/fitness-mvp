@@ -266,13 +266,13 @@ model Notification {
 
 model Message {
   id        String   @id @default(cuid())
-  sender    User     @relation("UserMessages", fields: [senderId], references: [id])
+  sender    User     @relation("SentMessages", fields: [senderId], references: [id])
   senderId  String
-  receiver  User     @relation("UserMessages", fields: [receiverId], references: [id])
+  receiver  User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
   receiverId String
-  text      String
-  read      Boolean  @default(false)
-  createdAt DateTime @default(now())
+  content   String
+  timestamp DateTime @default(now())
+
 }
 
 model PlanEnrollment {
