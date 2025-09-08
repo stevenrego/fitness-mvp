@@ -58,8 +58,11 @@ model User {
   roles         Role[]           @default([USER])
   createdAt     DateTime         @default(now())
   updatedAt     DateTime         @updatedAt
-  coach     CoachProfile?  @relation("CoachOwner")
-  assignedCoach CoachProfile? @relation("CoachClients", fields: [assignedCoachId], references: [id])
+   // Each user can optionally be a coach
+  coach         CoachProfile?  @relation("CoachOwner")
+
+  // Each user can optionally be assigned to a coach
+  assignedCoach CoachProfile?  @relation("CoachClients", fields: [assignedCoachId], references: [id])
   assignedCoachId String?
   dieticianProfile DieticianProfile?
   sessions      WorkoutSession[]
