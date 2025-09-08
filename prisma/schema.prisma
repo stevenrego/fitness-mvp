@@ -121,8 +121,6 @@ model DieticianProfile {
   updatedAt    DateTime @updatedAt
 }
 
-}
-
 model WorkoutPlan {
   id          String        @id @default(cuid())
   title       String
