@@ -79,11 +79,11 @@ model User {
 model CoachProfile {
   id           String     @id @default(cuid())
 
-  // The User who is this coach (1-to-1)
+  // This field connects the coach to their user account
   user         User       @relation("CoachOwner", fields: [userId], references: [id])
   userId       String     @unique
 
-  // The Users who are this coach’s clients (1-to-many)
+  // This field connects the coach to their client users
   clients      User[]     @relation("CoachClients")
 
   expertise    String?
