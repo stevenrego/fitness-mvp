@@ -13,14 +13,11 @@
     "jsx": "preserve",
     "incremental": true,
     "baseUrl": ".",
-    "paths": { "@/*": ["./*"] }
-  },
-  
-  "compilerOptions": {
+    "paths": {
+      "@/*": ["./*"]
+    },
     "typeRoots": ["./types", "./node_modules/@types"]
-}
-
+  },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }
-
