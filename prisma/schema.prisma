@@ -353,6 +353,16 @@ model NutritionEntry {
   date      DateTime @default(now())
 }
 
+model Habit {
+  id        String     @id @default(cuid())
+  user      User       @relation(fields: [userId], references: [id])
+  userId    String
+  title     String
+  completed Boolean    @default(false)
+  createdAt DateTime   @default(now())
+  logs      HabitLog[] // ✅ Added back-relation for HabitLog
+}
+
 model HabitLog {
   id        String   @id @default(cuid())
   habit     Habit    @relation(fields: [habitId], references: [id])
@@ -363,11 +373,3 @@ model HabitLog {
   status    String
 }
 
-model Habit {
-  id        String   @id @default(cuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  title     String
-  completed Boolean  @default(false)
-  createdAt DateTime @default(now())
-}
