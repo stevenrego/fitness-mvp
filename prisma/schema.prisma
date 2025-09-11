@@ -360,7 +360,7 @@ model Habit {
   title     String
   completed Boolean    @default(false)
   createdAt DateTime   @default(now())
-  logs      HabitLog[] // ✅ Added back-relation for HabitLog
+  logs      HabitLog[] // ✅ Back-relation added for HabitLog
 }
 
 model HabitLog {
