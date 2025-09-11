@@ -353,6 +353,16 @@ model NutritionEntry {
   date      DateTime @default(now())
 }
 
+model HabitLog {
+  id        String   @id @default(cuid())
+  habit     Habit    @relation(fields: [habitId], references: [id])
+  habitId   String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  date      DateTime @default(now())
+  status    String
+}
+
 model Habit {
   id        String   @id @default(cuid())
   user      User     @relation(fields: [userId], references: [id])
