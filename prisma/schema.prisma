@@ -119,6 +119,14 @@ model WorkoutPlan {
   enrollments PlanEnrollment[]
 }
 
+model NutritionEntry {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  calories  Int
+  date      DateTime @default(now())
+}
+
 model WorkoutDay {
   id        String     @id @default(cuid())
   plan      WorkoutPlan @relation(fields: [planId], references: [id])
