@@ -78,6 +78,7 @@ model User {
   dieticianProfile   DieticianProfile?  @relation("DieticianOwner")
   assignedDietician  DieticianProfile?  @relation("DieticianClients", fields: [assignedDieticianId], references: [id])
   assignedDieticianId String?
+  nutritionEntries NutritionEntry[]
 }
 
 model CoachProfile {
