@@ -75,7 +75,7 @@ model User {
   transactions  Transaction[]
   nutritionEntries NutritionEntry[]
   habits        Habit[]
-  HabitLog      HabitLog[]
+  habitLogs      HabitLog[]
   gym           Gym?             @relation(fields: [gymId], references: [id])
   gymId         String?
   dieticianProfile   DieticianProfile?  @relation("DieticianOwner")
