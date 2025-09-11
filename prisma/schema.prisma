@@ -73,12 +73,13 @@ model User {
   dailyLogs     DailyLog[]
   achievements  Achievement[]
   transactions  Transaction[]
+  nutritionEntries NutritionEntry[]
+  habits        Habit[]
   gym           Gym?             @relation(fields: [gymId], references: [id])
   gymId         String?
   dieticianProfile   DieticianProfile?  @relation("DieticianOwner")
   assignedDietician  DieticianProfile?  @relation("DieticianClients", fields: [assignedDieticianId], references: [id])
   assignedDieticianId String?
-  nutritionEntries NutritionEntry[]
 }
 
 model CoachProfile {
@@ -118,14 +119,6 @@ model WorkoutPlan {
   coachId     String?
   days        WorkoutDay[]
   enrollments PlanEnrollment[]
-}
-
-model NutritionEntry {
-  id        String   @id @default(cuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  calories  Int
-  date      DateTime @default(now())
 }
 
 model WorkoutDay {
@@ -350,4 +343,21 @@ model WorkoutSession {
   duration  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model NutritionEntry {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  calories  Int
+  date      DateTime @default(now())
+}
+
+model Habit {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  title     String
+  completed Boolean  @default(false)
+  createdAt DateTime @default(now())
 }
