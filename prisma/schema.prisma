@@ -359,10 +359,12 @@ model Habit {
   user      User       @relation(fields: [userId], references: [id])
   userId    String
   title     String
+  frequency String?    // ✅ add this if you're passing `frequency`
   completed Boolean    @default(false)
   createdAt DateTime   @default(now())
-  logs      HabitLog[] // ✅ Back-relation added for HabitLog
+  logs      HabitLog[] // ✅ make sure this exists or the GET call will fail
 }
+
 
 model HabitLog {
   id        String   @id @default(cuid())
