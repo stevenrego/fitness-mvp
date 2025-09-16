@@ -1,5 +1,5 @@
 ﻿import { NextResponse } from 'next/server';
-import { prisma } from '@/src/lib/db';
+import { prisma } from '@/lib/db';
 import bcrypt from 'bcryptjs';
 export async function POST(req: Request) {
   const form = await req.formData();
@@ -13,3 +13,4 @@ export async function POST(req: Request) {
   await prisma.user.create({ data: { email, password: hash, name } });
   return NextResponse.json({ ok: true });
 }
+
