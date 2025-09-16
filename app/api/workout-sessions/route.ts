@@ -1,6 +1,6 @@
 ﻿import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { auth } from '@/src/lib/auth';
+import { auth } from '@/lib/auth';
 export async function GET() {
   const s = await auth(); if (!s?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   const sessions = await prisma.workoutSession.findMany({ where: { userId: s.user.id }, include: { sets: true }, orderBy: { startedAt: 'desc' }, take: 50 });
@@ -16,4 +16,5 @@ export async function POST(req: Request) {
   });
   return NextResponse.json(created);
 }
+
 
