@@ -342,8 +342,21 @@ model WorkoutSession {
   title     String
   date      DateTime @default(now())
   duration  Int
+  sets       Set[] 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+
+model Set {
+  id                String          @id @default(cuid())
+  workoutSessionId  String
+  workoutSession    WorkoutSession @relation("SessionSets", fields: [workoutSessionId], references: [id])
+
+  // Add any other fields here, like reps, weight, etc.
+  reps     Int
+  weight   Float
+
 }
 
 model NutritionEntry {
