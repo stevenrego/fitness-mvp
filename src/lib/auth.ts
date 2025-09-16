@@ -1,7 +1,7 @@
 // src/lib/auth.ts (NextAuth v4 helper for App Router)
 import type { NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { prisma } from "@/src/lib/db";
+import { prisma } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { getServerSession } from "next-auth";
@@ -52,3 +52,4 @@ export const authOptions: NextAuthOptions = {
 export function auth() {
   return getServerSession(authOptions);
 }
+
