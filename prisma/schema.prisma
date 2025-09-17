@@ -341,6 +341,7 @@ model WorkoutSession {
   user       User     @relation(fields: [userId], references: [id])
   startedAt  DateTime @default(now())
   duration   Int
+ notes     String?
 endedAt   DateTime?
 
   // ✅ Correct relation with explicit name
