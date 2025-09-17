@@ -336,28 +336,29 @@ model Gym {
 }
 
 model WorkoutSession {
-  id        String   @id @default(cuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  title     String
-  date      DateTime @default(now())
-  duration  Int
-  sets       Set[] 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  startedAt  DateTime @default(now())
+  duration   Int
+
+  // ✅ Correct relation with explicit name
+  sets       Set[]    @relation("WorkoutSessionToSets")
+
+  createdAt  DateTime @default(now())
 }
+
 
 
 model Set {
   id                String          @id @default(cuid())
   workoutSessionId  String
-  workoutSession    WorkoutSession @relation("SessionSets", fields: [workoutSessionId], references: [id])
+  workoutSession    WorkoutSession @relation("WorkoutSessionToSets", fields: [workoutSessionId], references: [id])
 
-  // Add any other fields here, like reps, weight, etc.
   reps     Int
   weight   Float
-
 }
+
 
 model NutritionEntry {
   id        String   @id @default(cuid())
