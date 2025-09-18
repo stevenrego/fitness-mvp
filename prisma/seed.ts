@@ -1,4 +1,3 @@
-
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
@@ -7,7 +6,6 @@ async function main() {
     data: {
       name: 'Test User',
       email: 'testuser@example.com',
-      role: 'USER',
       coachProfile: {
         create: {
           bio: 'This is a test coach',
@@ -29,15 +27,10 @@ async function main() {
         ],
       },
       pointTxns: {
-  create: {
-    type: 'EARN',
-    points: 100,
-    reason: 'Initial reward'
-  }
-}
-  }
-}
-
+        create: {
+          type: 'EARN',
+          points: 100,
+          reason: 'Initial reward',
         },
       },
     },
@@ -75,9 +68,11 @@ async function main() {
   console.log('Seeded test data.');
 }
 
-main().catch(e => {
-  console.error(e);
-  process.exit(1);
-}).finally(async () => {
-  await prisma.$disconnect();
-});
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
