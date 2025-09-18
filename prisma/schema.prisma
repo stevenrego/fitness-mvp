@@ -96,11 +96,11 @@ model CoachProfile {
   clients      User[]        @relation("CoachClients")
   expertise    String?
   experience   Int?
+  bio          String?
+  certifications String?
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   workoutPlans WorkoutPlan[]
-  bio            String?
-  certifications String?
 }
 
 model DieticianProfile {
