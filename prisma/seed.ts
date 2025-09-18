@@ -29,9 +29,15 @@ async function main() {
         ],
       },
       pointTxns: {
-        create: {
-          type: 'EARN',
-          points: 100,
+  create: {
+    type: 'EARN',
+    points: 100,
+    reason: 'Initial reward'
+  }
+}
+  }
+}
+
         },
       },
     },
