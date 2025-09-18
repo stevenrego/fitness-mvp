@@ -35,20 +35,24 @@ async function main() {
         },
       },
     },
+    include: {
+      coachProfile: true,
+      dieticianProfile: true,
+    },
   });
 
   const workoutPlan = await prisma.workoutPlan.create({
     data: {
       title: 'Beginner Plan',
       description: 'A 4-week beginner plan',
-      coach: { connect: { id: user.coachProfileId } },
+      coach: { connect: { id: user.coachProfile.id } },
     },
   });
 
   const mealPlan = await prisma.mealPlan.create({
     data: {
       title: 'High Protein Plan',
-      coach: { connect: { id: user.dieticianProfileId } },
+      coach: { connect: { id: user.dieticianProfile.id } },
     },
   });
 
@@ -66,12 +70,12 @@ async function main() {
     },
   });
 
-  console.log('Seeded test data.');
+  console.log('✅ Seeded test data successfully.');
 }
 
 main()
   .catch((e) => {
-    console.error(e);
+    console.error('❌ Seeding failed:', e);
     process.exit(1);
   })
   .finally(async () => {
