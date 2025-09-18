@@ -59,6 +59,8 @@ model User {
   coach               CoachProfile?        @relation("CoachOwner")
   assignedCoach       CoachProfile?        @relation("CoachClients", fields: [assignedCoachId], references: [id])
   assignedCoachId     String?
+  coachProfile    CoachProfile?   @relation(fields: [coachProfileId], references: [id])
+  coachProfileId  String?         // This links to CoachProfile
   sessions            WorkoutSession[]
   workoutTemplates WorkoutTemplate[]  // 👈 Add this
   subscription        Subscription?
@@ -82,6 +84,8 @@ model User {
   dieticianProfile    DieticianProfile?    @relation("DieticianOwner")
   assignedDietician   DieticianProfile?    @relation("DieticianClients", fields: [assignedDieticianId], references: [id])
   assignedDieticianId String?
+
+  
 }
 
 model CoachProfile {
