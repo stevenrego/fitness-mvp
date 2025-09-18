@@ -60,6 +60,7 @@ async function main() {
     data: {
       title: 'Free Protein Shake',
       cost: 50,
+      type: 'FREE_ITEM',
     },
   });
 
