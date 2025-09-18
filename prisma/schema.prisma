@@ -321,6 +321,11 @@ model Achievement {
 }
 
 
+enum PointTxnType {
+  EARN
+  REDEEM
+}
+
 model PointTransaction {
   id        String   @id @default(cuid())
   user      User     @relation(fields: [userId], references: [id])
@@ -329,8 +334,8 @@ model PointTransaction {
   reason    String
   type      PointTxnType  // ✅ now typed!
   createdAt DateTime @default(now())
-
 }
+
 
 model Reward {
   id          String      @id @default(cuid())
