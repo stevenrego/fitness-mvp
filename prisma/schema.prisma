@@ -110,11 +110,12 @@ model DieticianProfile {
 
 model WorkoutTemplate {
   id        String                @id @default(cuid())
+  name      String                // ✅ Add this
+  notes     String?               // ✅ Add this
   user      User                  @relation(fields: [userId], references: [id])
   userId    String
-  title     String
   items     WorkoutTemplateItem[]
-  createdAt DateTime              @default(now())
+
 }
 
 model WorkoutTemplateItem {
