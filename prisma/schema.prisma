@@ -44,94 +44,94 @@ enum OrderStatus {
 // MODELS
 // ====================
 model User {
-  id            String           @id @default(cuid())
-  email         String           @unique
-  password      String
-  name          String?
-  gender        String?
-  dob           DateTime?
-  height        Float?
-  weight        Float?
-  goal          String?
-  roles         Role[]           @default([USER])
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
-  coach         CoachProfile?    @relation("CoachOwner")
-  assignedCoach CoachProfile?    @relation("CoachClients", fields: [assignedCoachId], references: [id])
-  assignedCoachId String?
-  sessions      WorkoutSession[]
-  subscription  Subscription?
-  notifications Notification[]
-  posts         Post[]
-  comments      Comment[]
-  messagesSent  Message[]        @relation("SentMessages")
-  messagesReceived Message[]     @relation("ReceivedMessages")
-  pointTxns     PointTransaction[]
-  orders        ShopOrder[]
-  challenges    ChallengeParticipant[]
-  planProgress  PlanEnrollment[]
-  dailyLogs     DailyLog[]
-  achievements  Achievement[]
-  transactions  Transaction[]
-  nutritionEntries NutritionEntry[]
-  habits        Habit[]
-  habitLogs      HabitLog[]
-  gym           Gym?             @relation(fields: [gymId], references: [id])
-  gymId         String?
-  dieticianProfile   DieticianProfile?  @relation("DieticianOwner")
-  assignedDietician  DieticianProfile?  @relation("DieticianClients", fields: [assignedDieticianId], references: [id])
+  id                  String               @id @default(cuid())
+  email               String               @unique
+  password            String
+  name                String?
+  gender              String?
+  dob                 DateTime?
+  height              Float?
+  weight              Float?
+  goal                String?
+  roles               Role[]               @default([USER])
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  coach               CoachProfile?        @relation("CoachOwner")
+  assignedCoach       CoachProfile?        @relation("CoachClients", fields: [assignedCoachId], references: [id])
+  assignedCoachId     String?
+  sessions            WorkoutSession[]
+  subscription        Subscription?
+  notifications       Notification[]
+  posts               Post[]
+  comments            Comment[]
+  messagesSent        Message[]            @relation("SentMessages")
+  messagesReceived    Message[]            @relation("ReceivedMessages")
+  pointTxns           PointTransaction[]
+  orders              ShopOrder[]
+  challenges          ChallengeParticipant[]
+  planProgress        PlanEnrollment[]
+  dailyLogs           DailyLog[]
+  achievements        Achievement[]
+  transactions        Transaction[]
+  nutritionEntries    NutritionEntry[]
+  habits              Habit[]
+  habitLogs           HabitLog[]
+  gym                 Gym?                 @relation(fields: [gymId], references: [id])
+  gymId               String?
+  dieticianProfile    DieticianProfile?    @relation("DieticianOwner")
+  assignedDietician   DieticianProfile?    @relation("DieticianClients", fields: [assignedDieticianId], references: [id])
   assignedDieticianId String?
 }
 
 model CoachProfile {
-  id           String     @id @default(cuid())
-  user         User       @relation("CoachOwner", fields: [userId], references: [id])
-  userId       String     @unique
-  clients      User[]     @relation("CoachClients")
+  id           String        @id @default(cuid())
+  user         User          @relation("CoachOwner", fields: [userId], references: [id])
+  userId       String        @unique
+  clients      User[]        @relation("CoachClients")
   expertise    String?
   experience   Int?
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
   workoutPlans WorkoutPlan[]
 }
 
 model DieticianProfile {
-  id           String   @id @default(cuid())
-  user         User     @relation("DieticianOwner", fields: [userId], references: [id])
-  userId       String   @unique
-  clients      User[]   @relation("DieticianClients")
-  specialty    String?
-  license      String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  mealPlans    MealPlan[]
+  id         String         @id @default(cuid())
+  user       User           @relation("DieticianOwner", fields: [userId], references: [id])
+  userId     String         @unique
+  clients    User[]         @relation("DieticianClients")
+  specialty  String?
+  license    String?
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+  mealPlans  MealPlan[]
 }
 
 model WorkoutPlan {
-  id          String        @id @default(cuid())
+  id          String           @id @default(cuid())
   title       String
   description String?
   level       String?
   duration    Int?
   price       Float?
   visibility  String?
-  createdAt   DateTime      @default(now())
-  coach       CoachProfile? @relation(fields: [coachId], references: [id])
+  createdAt   DateTime         @default(now())
+  coach       CoachProfile?    @relation(fields: [coachId], references: [id])
   coachId     String?
   days        WorkoutDay[]
   enrollments PlanEnrollment[]
 }
 
 model WorkoutDay {
-  id        String     @id @default(cuid())
+  id        String      @id @default(cuid())
   plan      WorkoutPlan @relation(fields: [planId], references: [id])
   planId    String
   dayNumber Int
-  exercises Exercise[] @relation("WorkoutDayExercises")
+  exercises Exercise[]  @relation("WorkoutDayExercises")
 }
 
 model Exercise {
-  id           String   @id @default(cuid())
+  id           String        @id @default(cuid())
   name         String
   description  String?
   category     String?
@@ -140,31 +140,31 @@ model Exercise {
   equipment    String?
   defaultSets  Int?
   defaultReps  Int?
-  workoutDays  WorkoutDay[] @relation("WorkoutDayExercises")
+  workoutDays  WorkoutDay[]  @relation("WorkoutDayExercises")
 }
 
 model MealPlan {
-  id        String   @id @default(cuid())
-  title     String
-  coach     DieticianProfile? @relation(fields: [coachId], references: [id])
-  coachId   String?
-  calories  Float?
-  macros    String?
+  id          String            @id @default(cuid())
+  title       String
+  coach       DieticianProfile? @relation(fields: [coachId], references: [id])
+  coachId     String?
+  calories    Float?
+  macros      String?
   description String?
-  meals     Meal[]
+  meals       Meal[]
 }
 
 model Meal {
-  id         String   @id @default(cuid())
+  id         String      @id @default(cuid())
   name       String
-  mealPlan   MealPlan @relation(fields: [mealPlanId], references: [id])
+  mealPlan   MealPlan    @relation(fields: [mealPlanId], references: [id])
   mealPlanId String
   mealType   MealType
-  foodItems  FoodItem[] @relation("MealFoodItems")
+  foodItems  FoodItem[]  @relation("MealFoodItems")
 }
 
 model FoodItem {
-  id          String   @id @default(cuid())
+  id          String     @id @default(cuid())
   name        String
   calories    Float
   carbs       Float
@@ -173,13 +173,13 @@ model FoodItem {
   imageUrl    String?
   barcode     String?
   portionSize String?
-  meals       Meal[]   @relation("MealFoodItems")
+  meals       Meal[]     @relation("MealFoodItems")
 }
 
 model Subscription {
-  id        String              @id @default(cuid())
-  user      User                @relation(fields: [userId], references: [id])
-  userId    String              @unique
+  id        String               @id @default(cuid())
+  user      User                 @relation(fields: [userId], references: [id])
+  userId    String               @unique
   type      String
   status    SubscriptionStatus
   startDate DateTime
@@ -189,48 +189,48 @@ model Subscription {
 }
 
 model Transaction {
-  id         String   @id @default(cuid())
-  user       User     @relation(fields: [userId], references: [id])
-  userId     String
-  amount     Float
-  type       String
-  status     String
-  provider   String
-  timestamp  DateTime @default(now())
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  amount    Float
+  type      String
+  status    String
+  provider  String
+  timestamp DateTime @default(now())
 }
 
 model Challenge {
-  id          String   @id @default(cuid())
-  title       String
-  type        String
-  startDate   DateTime
-  endDate     DateTime
-  criteria    String?
-  adminId     String?
-  status      String?
+  id           String                 @id @default(cuid())
+  title        String
+  type         String
+  startDate    DateTime
+  endDate      DateTime
+  criteria     String?
+  adminId      String?
+  status       String?
   participants ChallengeParticipant[]
 }
 
 model ChallengeParticipant {
-  id         String    @id @default(cuid())
-  user       User      @relation(fields: [userId], references: [id])
-  userId     String
-  challenge  Challenge @relation(fields: [challengeId], references: [id])
-  challengeId String
-  progress   String?
-  proofImage String?
-  verified   Boolean?
+  id              String    @id @default(cuid())
+  user            User      @relation(fields: [userId], references: [id])
+  userId          String
+  challenge       Challenge @relation(fields: [challengeId], references: [id])
+  challengeId     String
+  progress        String?
+  proofImage      String?
+  verified        Boolean?
   rejectionReason String?
 }
 
 model Post {
-  id        String    @id @default(cuid())
-  user      User      @relation(fields: [userId], references: [id])
+  id        String     @id @default(cuid())
+  user      User       @relation(fields: [userId], references: [id])
   userId    String
   text      String?
   mediaUrl  String?
   type      String?
-  createdAt DateTime  @default(now())
+  createdAt DateTime   @default(now())
   comments  Comment[]
 }
 
@@ -255,38 +255,38 @@ model Notification {
 }
 
 model Message {
-  id        String   @id @default(cuid())
-  sender    User     @relation("SentMessages", fields: [senderId], references: [id])
-  senderId  String
-  receiver  User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  id         String   @id @default(cuid())
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id])
+  senderId   String
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
   receiverId String
-  content   String
-  timestamp DateTime @default(now())
+  content    String
+  timestamp  DateTime @default(now())
 }
 
 model PlanEnrollment {
-  id            String       @id @default(cuid())
-  user          User         @relation(fields: [userId], references: [id])
-  userId        String
-  workoutPlan   WorkoutPlan @relation(fields: [planId], references: [id])
-  planId        String
-  progress      String?
-  startDate     DateTime?
-  status        String?
+  id           String       @id @default(cuid())
+  user         User         @relation(fields: [userId], references: [id])
+  userId       String
+  workoutPlan  WorkoutPlan  @relation(fields: [planId], references: [id])
+  planId       String
+  progress     String?
+  startDate    DateTime?
+  status       String?
 }
 
 model DailyLog {
-  id        String   @id @default(cuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  date      DateTime
-  notes     String?
+  id           String        @id @default(cuid())
+  user         User          @relation(fields: [userId], references: [id])
+  userId       String
+  date         DateTime
+  notes        String?
   achievements Achievement[]
 }
 
 model Achievement {
-  id        String   @id @default(cuid())
-  user      User     @relation(fields: [userId], references: [id])
+  id        String    @id @default(cuid())
+  user      User      @relation(fields: [userId], references: [id])
   userId    String
   type      String
   badge     String?
@@ -305,23 +305,23 @@ model PointTransaction {
 }
 
 model Reward {
-  id        String   @id @default(cuid())
-  title     String
-  type      String
-  cost      Int
-  inventory Int?
-  image     String?
+  id          String      @id @default(cuid())
+  title       String
+  type        String
+  cost        Int
+  inventory   Int?
+  image       String?
   description String?
-  orders    ShopOrder[]
+  orders      ShopOrder[]
 }
 
 model ShopOrder {
-  id        String     @id @default(cuid())
-  user      User       @relation(fields: [userId], references: [id])
-  userId    String
-  reward    Reward     @relation(fields: [rewardId], references: [id])
-  rewardId  String
-  status    OrderStatus
+  id         String     @id @default(cuid())
+  user       User       @relation(fields: [userId], references: [id])
+  userId     String
+  reward     Reward     @relation(fields: [rewardId], references: [id])
+  rewardId   String
+  status     OrderStatus
   redeemedAt DateTime?
 }
 
@@ -342,20 +342,18 @@ model WorkoutSession {
   startedAt DateTime?
   endedAt   DateTime?
   duration  Int?
-  notes     String?                     // ✅ this is what you were missing
+  notes     String?
   sets      Set[]     @relation("SessionSets")
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
 }
 
-
 model Set {
-  id                String   @id @default(uuid())
+  id                String          @id @default(uuid())
   reps              Int
   weight            Float?
   workoutSessionId  String
-  workoutSession    WorkoutSession @relation("SessionSets", fields: [workoutSessionId], references: [id])
+  workoutSession    WorkoutSession  @relation("SessionSets", fields: [workoutSessionId], references: [id])
 }
-
 
 model NutritionEntry {
   id        String   @id @default(cuid())
@@ -370,12 +368,11 @@ model Habit {
   user      User       @relation(fields: [userId], references: [id])
   userId    String
   title     String
-  frequency String?    // ✅ add this if you're passing `frequency`
+  frequency String?
   completed Boolean    @default(false)
   createdAt DateTime   @default(now())
-  logs      HabitLog[] // ✅ make sure this exists or the GET call will fail
+  logs      HabitLog[]
 }
-
 
 model HabitLog {
   id        String   @id @default(cuid())
@@ -386,4 +383,3 @@ model HabitLog {
   date      DateTime @default(now())
   status    String
 }
-
