@@ -60,6 +60,7 @@ model User {
   assignedCoach       CoachProfile?        @relation("CoachClients", fields: [assignedCoachId], references: [id])
   assignedCoachId     String?
   sessions            WorkoutSession[]
+  workoutTemplates WorkoutTemplate[]  // 👈 Add this
   subscription        Subscription?
   notifications       Notification[]
   posts               Post[]
@@ -158,6 +159,7 @@ model Exercise {
   videoUrl     String?
   equipment    String?
   defaultSets  Int?
+  templateItems WorkoutTemplateItem[]  // 👈 Add this
   defaultReps  Int?
   workoutDays  WorkoutDay[]  @relation("WorkoutDayExercises")
 }
