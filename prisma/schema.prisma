@@ -53,7 +53,7 @@ model User {
   height              Float?
   weight              Float?
   goal                String?
-  roles               Role[]               @default([USER])
+  role               Role[]               @default([USER])
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
   coach               CoachProfile?        @relation("CoachOwner")
