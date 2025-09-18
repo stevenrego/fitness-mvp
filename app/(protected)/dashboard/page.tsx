@@ -1,4 +1,4 @@
-"use client";
+
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
@@ -22,3 +22,4 @@ export default async function DashboardPage() {
     </div>
   );
 }
+
