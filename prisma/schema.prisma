@@ -59,7 +59,7 @@ model User {
   coach               CoachProfile?        @relation("CoachOwner")
   assignedCoach       CoachProfile?        @relation("CoachClients", fields: [assignedCoachId], references: [id])
   assignedCoachId     String?
-  coachProfile    CoachProfile?   @relation(fields: [coachProfileId], references: [id]) 
+ 
   coachProfile CoachProfile?  @relation("CoachOwner")
   coachProfileId  String?         // This links to CoachProfile
   sessions            WorkoutSession[]
