@@ -45,14 +45,22 @@ async function main() {
     data: {
       title: 'Beginner Plan',
       description: 'A 4-week beginner plan',
-      coach: { connect: { id: user.coachProfile.id } },
+      coach: {
+        connect: {
+          id: user.coachProfile!.id,
+        },
+      },
     },
   });
 
   const mealPlan = await prisma.mealPlan.create({
     data: {
       title: 'High Protein Plan',
-      coach: { connect: { id: user.dieticianProfile.id } },
+      coach: {
+        connect: {
+          id: user.dieticianProfile!.id,
+        },
+      },
     },
   });
 
@@ -60,14 +68,23 @@ async function main() {
     data: {
       title: 'Free Protein Shake',
       cost: 50,
-      type: 'FREE_ITEM',
+      type: 'FREE_ITEM', // ✅ Make sure this matches one of your allowed types
     },
   });
 
   await prisma.shopOrder.create({
     data: {
-      userId: user.id,
-      rewardId: reward.id,
+      user: {
+        connect: {
+          id: user.id,
+        },
+      },
+      reward: {
+        connect: {
+          id: reward.id,
+        },
+      },
+      status: 'PENDING', // ✅ Required if status is non-nullable in your schema
     },
   });
 
