@@ -320,13 +320,16 @@ model Achievement {
   logId     String?
 }
 
+
 model PointTransaction {
   id        String   @id @default(cuid())
   user      User     @relation(fields: [userId], references: [id])
   userId    String
   points    Int
   reason    String
+  type      PointTxnType  // ✅ now typed!
   createdAt DateTime @default(now())
+
 }
 
 model Reward {
