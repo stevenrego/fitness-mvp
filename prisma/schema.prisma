@@ -98,6 +98,8 @@ model CoachProfile {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   workoutPlans WorkoutPlan[]
+  bio            String?
+  certifications String?
 }
 
 model DieticianProfile {
