@@ -336,29 +336,24 @@ model Gym {
 }
 
 model WorkoutSession {
-  id         String   @id @default(cuid())
-  userId     String
-  user       User     @relation(fields: [userId], references: [id])
-  startedAt  DateTime @default(now())
-  duration   Int
- notes     String?
-endedAt   DateTime?
-
-  // ✅ Correct relation with explicit name
-  sets       Set[]    @relation("WorkoutSessionToSets")
-
-  createdAt  DateTime @default(now())
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  startedAt DateTime?
+  endedAt   DateTime?
+  duration  Int?
+  notes     String?                     // ✅ this is what you were missing
+  sets      Set[]     @relation("SessionSets")
+  createdAt DateTime @default(now())
 }
 
 
-
 model Set {
-  id                String          @id @default(cuid())
+  id                String   @id @default(uuid())
+  reps              Int
+  weight            Float?
   workoutSessionId  String
-  workoutSession    WorkoutSession @relation("WorkoutSessionToSets", fields: [workoutSessionId], references: [id])
-
-  reps     Int
-  weight   Float
+  workoutSession    WorkoutSession @relation("SessionSets", fields: [workoutSessionId], references: [id])
 }
 
 
