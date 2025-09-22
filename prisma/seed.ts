@@ -10,7 +10,7 @@ async function main() {
     data: {
       name: 'Test User',
       email: 'testuser@example.com',
-      password: test123,
+      password: 'test123',
       coachProfile: {
         create: {
           bio: 'This is a test coach',
