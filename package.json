@@ -3,15 +3,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node scripts/first-run.cjs && next dev",
-    "build:prod": "node ./scripts/strip-bom.mjs && npx prisma generate && npx prisma db push && npx tsx prisma/seed.ts && next build",
-    "build:preview": "node ./scripts/strip-bom.mjs && npx prisma generate && next build",
-    "start": "next start",
-    "lint": "next lint",
-    "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev",
-    "seed": "tsx prisma/seed.ts"
-  },
+  "dev": "node scripts/first-run.cjs && next dev",
+  "build:prod": "node ./scripts/strip-bom.mjs && npx prisma generate && npx prisma db push && npx tsx prisma/seed.ts && next build",
+  "build:preview": "node ./scripts/strip-bom.mjs && npx prisma generate && next build",
+  "start": "next start",
+  "lint": "next lint",
+  "prisma:generate": "prisma generate",
+  "prisma:migrate": "prisma migrate dev",
+  "seed": "tsx prisma/seed.ts"
+},
   "dependencies": {
     "@prisma/client": "5.22.0",
     "@tanstack/react-query": "^5.51.0",
@@ -39,3 +39,4 @@
     "typescript": "^5.6.2"
   }
 }
+
