@@ -4,8 +4,9 @@
   "type": "module",
   "scripts": {
     "dev": "node scripts/first-run.cjs && next dev",
-    "build:prod": "node ./scripts/strip-bom.mjs && npx prisma generate && npx prisma db push && npx tsx prisma/seed.ts && next build",
-    "build:preview": "node ./scripts/strip-bom.mjs && npx prisma generate && next build",
+   "scripts": {
+  "build:prod": "node ./scripts/strip-bom.mjs && npx prisma generate && npx prisma db push && npx tsx prisma/seed.ts && next build",
+  "build:preview": "node ./scripts/strip-bom.mjs && npx prisma generate && next build"
     "start": "next start",
     "lint": "next lint",
     "prisma:generate": "prisma generate",
@@ -39,4 +40,5 @@
     "typescript": "^5.6.2"
   }
 }
+
 
