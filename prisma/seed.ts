@@ -1,12 +1,16 @@
 import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcryptjs';
+
 const prisma = new PrismaClient();
 
 async function main() {
+  const hashedPassword = await bcrypt.hash("test123", 10);
+
   const user = await prisma.user.create({
     data: {
       name: 'Test User',
       email: 'testuser@example.com',
-      password: 'test123',
+      password: hashedPassword,
       coachProfile: {
         create: {
           bio: 'This is a test coach',
@@ -22,8 +26,8 @@ async function main() {
       posts: {
         create: [
           {
-            content: 'Welcome to the fitness app!',
-            title: 'First Post',
+            text: 'Welcome to the fitness app!',
+            type: 'INTRO',
           },
         ],
       },
@@ -45,22 +49,14 @@ async function main() {
     data: {
       title: 'Beginner Plan',
       description: 'A 4-week beginner plan',
-      coach: {
-        connect: {
-          id: user.coachProfile!.id,
-        },
-      },
+      coach: { connect: { id: user.coachProfile!.id } },
     },
   });
 
   const mealPlan = await prisma.mealPlan.create({
     data: {
       title: 'High Protein Plan',
-      coach: {
-        connect: {
-          id: user.dieticianProfile!.id,
-        },
-      },
+      coach: { connect: { id: user.dieticianProfile!.id } },
     },
   });
 
@@ -68,23 +64,15 @@ async function main() {
     data: {
       title: 'Free Protein Shake',
       cost: 50,
-      type: 'FREE_ITEM', // ✅ Make sure this matches one of your allowed types
+      type: 'FREE_ITEM',
     },
   });
 
   await prisma.shopOrder.create({
     data: {
-      user: {
-        connect: {
-          id: user.id,
-        },
-      },
-      reward: {
-        connect: {
-          id: reward.id,
-        },
-      },
-      status: 'PENDING', // ✅ Required if status is non-nullable in your schema
+      user: { connect: { id: user.id } },
+      reward: { connect: { id: reward.id } },
+      status: 'PENDING',
     },
   });
 
